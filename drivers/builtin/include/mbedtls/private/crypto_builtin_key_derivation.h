@@ -117,4 +117,86 @@ typedef struct {
 } psa_pbkdf2_key_derivation_t;
 #endif /* PSA_HAVE_SOFT_PBKDF2 */
 
+#if defined(MBEDTLS_PSA_BUILTIN_ALG_SP800_108_COUNTER_CMAC)
+#include <stdbool.h>
+
+#define SP800_108_INIT_CAPACITY (0x1fffffff)
+
+#define SP800_108_INTERATION_COUNTER_SIZE   4
+
+#ifndef SP800_108_LABEL_MAX_SIZE
+#define SP800_108_LABEL_MAX_SIZE            50
+#endif
+
+#define SP800_108_NULL_BYTE_SIZE            1
+
+#ifndef SP800_108_CONTEXT_MAX_SIZE
+#define SP800_108_CONTEXT_MAX_SIZE          50
+#endif
+
+#define SP800_108_K0_MAX_SIZE               PSA_MAC_MAX_SIZE
+
+#define SP800_108_ENCODED_LENGTH_SIZE       4
+
+#define SP800_108_TOTAL_INPUT_MAX_SIZE \
+    (SP800_108_INTERATION_COUNTER_SIZE + \
+     SP800_108_LABEL_MAX_SIZE + \
+     SP800_108_NULL_BYTE_SIZE + \
+     SP800_108_CONTEXT_MAX_SIZE + \
+     SP800_108_ENCODED_LENGTH_SIZE + \
+     SP800_108_K0_MAX_SIZE)
+
+#define SP800_108_INPUT_INTERATION_COUNTER_OFFSET(ctx) (0)
+
+#define SP800_108_INPUT_LABEL_OFFSET(ctx) \
+    (SP800_108_INTERATION_COUNTER_SIZE)
+
+#define SP800_108_INPUT_CONTEXT_OFFSET(ctx) \
+    (SP800_108_INPUT_LABEL_OFFSET(ctx) + \
+     (ctx)->label_length + \
+     SP800_108_NULL_BYTE_SIZE)
+
+#define SP800_108_INPUT_ENCODED_LENGTH_OFFSET(ctx) \
+    (SP800_108_INPUT_CONTEXT_OFFSET(ctx) + \
+     (ctx)->context_length)
+
+#define SP800_108_INPUT_K0_OFFSET(ctx) \
+    (SP800_108_INPUT_ENCODED_LENGTH_OFFSET(ctx) + \
+     SP800_108_ENCODED_LENGTH_SIZE)
+
+#define SP800_108_INPUT_LENGTH(ctx) \
+    (SP800_108_INPUT_K0_OFFSET(ctx) + \
+     (ctx)->block_size)
+
+enum sp800_108_counter_cmac_state {
+    SP800_108_COUNTER_CMAC_STATE_INIT,              /* no input yet */
+    SP800_108_COUNTER_CMAC_STATE_KEYED,             /* got key */
+    SP800_108_COUNTER_CMAC_STATE_LABELED,           /* label provided */
+    SP800_108_COUNTER_CMAC_STATE_CONTEXT_PROVIDED,  /* context provided */
+    SP800_108_COUNTER_CMAC_STATE_OUTPUT     /* output started */
+};
+
+typedef struct
+{
+    uint8_t MBEDTLS_PRIVATE(inputs)[SP800_108_TOTAL_INPUT_MAX_SIZE];
+
+    /* The key must be a block-cipher that is compatible with the CMAC algorithm */
+    mbedtls_svc_key_id_t MBEDTLS_PRIVATE(key);
+
+    /* The block size depends on the key type and bits */
+    size_t block_size;
+
+    /* Label, unless omitted, must be passed after the key */
+    size_t MBEDTLS_PRIVATE(label_length);
+
+    /* Context, unless omitted, must be passed after the label */
+    size_t MBEDTLS_PRIVATE(context_length);
+
+    /* Derivation state */
+    bool capacity_set; /* capacity must be set only once */
+    enum sp800_108_counter_cmac_state MBEDTLS_PRIVATE(state);
+    size_t MBEDTLS_PRIVATE(counter); /* 1-based */
+} psa_sp800_108_cmac_key_derivation_t;
+#endif /* MBEDTLS_PSA_BUILTIN_ALG_SP800_108_COUNTER_CMAC */
+
 #endif /* TF_PSA_CRYPTO_MBEDTLS_PRIVATE_CRYPTO_BUILTIN_KEY_DERIVATION_H */
