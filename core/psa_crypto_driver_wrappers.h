@@ -19,6 +19,9 @@
 #include "psa_crypto_mac.h"
 #include "psa_crypto_pake.h"
 #include "psa_crypto_rsa.h"
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+#include "cc3xx_opaque_keys.h"
+#endif
 
 #if defined(TF_PSA_CRYPTO_PQCP_MLDSA_ENABLED)
 #include "psa_crypto_mldsa.h"
@@ -1355,6 +1358,9 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt_setup(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
@@ -2135,6 +2141,9 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt_setup(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
@@ -2201,6 +2210,9 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt_setup(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
@@ -2599,6 +2611,9 @@ static inline psa_status_t psa_driver_wrapper_mac_compute(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
@@ -2672,6 +2687,9 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
@@ -2756,6 +2774,9 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
