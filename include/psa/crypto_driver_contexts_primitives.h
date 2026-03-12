@@ -31,6 +31,10 @@
 /* Include the context structure definitions for those drivers that were
  * declared during the autogeneration process. */
 
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+#include "cc3xx_crypto_primitives_private.h"
+#endif /* PSA_CRYPTO_DRIVER_CC3XX */
+
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1)
 #if defined(TF_PSA_CRYPTO_TEST_LIBTESTDRIVER1)
 #include "mbedtls/private/libtestdriver1-crypto_builtin_primitives.h"
@@ -112,6 +116,9 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_TEST)
     mbedtls_transparent_test_driver_hash_operation_t test_driver_ctx;
 #endif
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+    cc3xx_hash_operation_t cc3xx_driver_ctx;
+#endif
 } psa_driver_hash_context_t;
 
 typedef union {
@@ -128,6 +135,9 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_TEST)
     mbedtls_transparent_test_driver_cipher_operation_t transparent_test_driver_ctx;
     mbedtls_opaque_test_driver_cipher_operation_t opaque_test_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+    cc3xx_cipher_operation_t cc3xx_driver_ctx;
 #endif
 } psa_driver_cipher_context_t;
 
