@@ -37,7 +37,8 @@
 
 /* Generic implementation of some key derivation algorithms based on CMAC */
 #if (defined(PSA_WANT_ALG_PBKDF2_AES_CMAC_PRF_128) && \
-    !defined(MBEDTLS_PSA_ACCEL_ALG_PBKDF2_AES_CMAC_PRF_128))
+    !defined(MBEDTLS_PSA_ACCEL_ALG_PBKDF2_AES_CMAC_PRF_128)) || \
+     defined(PSA_WANT_ALG_SP800_108_COUNTER_CMAC)
 #define PSA_WANT_KEY_TYPE_AES 1
 #define PSA_WANT_ALG_CMAC 1
 #endif

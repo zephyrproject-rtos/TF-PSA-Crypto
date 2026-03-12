@@ -1822,6 +1822,19 @@
      ((alg) & PSA_ALG_HASH_MASK) | PSA_ALG_CATEGORY_HASH :      \
      0)
 
+#define PSA_ALG_SP800_108_COUNTER_CMAC          ((psa_algorithm_t) 0x08000800)
+
+/** Whether the specified algorithm is NIST SP800-108 Counter CMAC.
+ *
+ * \param alg An algorithm identifier (value of type #psa_algorithm_t).
+ *
+ * \return 1 if \c alg is NIST SP800 -108 Counter CMAC.
+ *         This macro may return either 0 or 1 if \c alg is not a supported
+ *         key derivation algorithm identifier.
+ */
+#define PSA_ALG_IS_SP800_108_COUNTER_CMAC(alg)                  \
+    ((alg) == PSA_ALG_SP800_108_COUNTER_CMAC)
+
 #define PSA_ALG_HKDF_BASE                       ((psa_algorithm_t) 0x08000100)
 /** Macro to build an HKDF algorithm.
  *
@@ -2784,6 +2797,14 @@ static inline int mbedtls_svc_key_id_is_null(mbedtls_svc_key_id_t key)
  * This must be a direct input, passed to psa_key_derivation_input_integer().
  */
 #define PSA_KEY_DERIVATION_INPUT_COST       ((psa_key_derivation_step_t) 0x0205)
+
+/** A Context for key derivation.
+ *
+ * This should be a direct input.
+ * It can also be a key of type #PSA_KEY_TYPE_RAW_DATA.
+ */
+#define PSA_KEY_DERIVATION_INPUT_CONTEXT    ((psa_key_derivation_step_t) 0x0206)
+
 
 /**@}*/
 
