@@ -54,6 +54,9 @@
 #define PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT
 #endif
 #include "tfm_builtin_key_loader.h"
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+#include "cc3xx_opaque_keys.h"
+#endif
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
 
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
@@ -137,6 +140,9 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
 
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
             return tfm_builtin_key_loader_get_key_buffer_size(psa_get_key_id(attributes),
                                                               key_buffer_size);
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
@@ -266,6 +272,9 @@ psa_status_t psa_driver_wrapper_get_builtin_key(
 
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
+#if defined(CC3XX_CRYPTO_OPAQUE_KEYS)
+        case CC3XX_OPAQUE_KEY_LOCATION:
+#endif
             return( tfm_builtin_key_loader_get_builtin_key(
                         slot_number,
                         attributes,
