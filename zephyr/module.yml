@@ -1,0 +1,8 @@
+name: tf-psa-crypto
+build:
+  cmake-ext: False
+  kconfig-ext: False
+security:
+  external-references:
+    - cpe:2.3:a:trustedfirmware:tf-psa-crypto:1.1.2:*:*:*:*:*:*:*
+    - pkg:github/Mbed-TLS/TF-PSA-Crypto@v1.1.2
