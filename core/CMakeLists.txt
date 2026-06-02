@@ -1,17 +1,13 @@
 file(GLOB src_crypto "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
 
 # The generated file `psa_crypto_driver_wrappers_no_static.c` may exist in the
-# source tree and therefore be picked up by the glob above. Remove it from
-# `src_crypto` if present, then append it using a relative path. This ensures
-# that the build system prefers the file from the build tree over the one in
-# the source tree.
-list(FIND src_crypto
-     "${CMAKE_CURRENT_SOURCE_DIR}/psa_crypto_driver_wrappers_no_static.c"
-     _idx)
-if(NOT _idx EQUAL -1)
-    list(REMOVE_AT src_crypto ${_idx})
+# dispatch directory if file generation isn't used. Prefer the version in the
+# build directory when file generation is used by using a relative path.
+if(GEN_FILES)
+    list(APPEND src_crypto psa_crypto_driver_wrappers_no_static.c)
+else()
+    list(APPEND src_crypto ${TF_PSA_CRYPTO_DISPATCH_DIR}/psa_crypto_driver_wrappers_no_static.c)
 endif()
-list(APPEND src_crypto psa_crypto_driver_wrappers_no_static.c)
 
 if(GEN_FILES)
     add_custom_command(
@@ -154,6 +150,7 @@ foreach(target IN LISTS target_libraries)
         # so that generated headers in the build tree take precedence.
         PUBLIC $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/>
                $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>
+               $<BUILD_INTERFACE:${TF_PSA_CRYPTO_DISPATCH_DIR}/include/>
                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
         PRIVATE ${TF_PSA_CRYPTO_PRIVATE_INCLUDE_DIRS}
                 # Needed to include psa_crypto_driver_wrappers.h
