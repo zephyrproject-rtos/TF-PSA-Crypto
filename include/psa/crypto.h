@@ -3251,13 +3251,13 @@ psa_status_t psa_verify_message(mbedtls_svc_key_id_t key,
  *           - Creating a key with the specified attributes is not allowed by
  *             implementation policy.
  *
- * \retval #PSA_ERROR_INSUFFICIENT_MEMORY \emptydescription
- * \retval #PSA_ERROR_INSUFFICIENT_STORAGE \emptydescription
- * \retval #PSA_ERROR_COMMUNICATION_FAILURE \emptydescription
- * \retval #PSA_ERROR_STORAGE_FAILURE \emptydescription
- * \retval #PSA_ERROR_DATA_CORRUPT \emptydescription
- * \retval #PSA_ERROR_DATA_INVALID \emptydescription
- * \retval #PSA_ERROR_CORRUPTION_DETECTED \emptydescription
+ * \retval #PSA_ERROR_INSUFFICIENT_MEMORY
+ * \retval #PSA_ERROR_INSUFFICIENT_STORAGE
+ * \retval #PSA_ERROR_COMMUNICATION_FAILURE
+ * \retval #PSA_ERROR_STORAGE_FAILURE
+ * \retval #PSA_ERROR_DATA_CORRUPT
+ * \retval #PSA_ERROR_DATA_INVALID
+ * \retval #PSA_ERROR_CORRUPTION_DETECTED
  * \retval #PSA_ERROR_BAD_STATE
  *         The library requires initializing by a call to `psa_crypto_init()`.
  */
