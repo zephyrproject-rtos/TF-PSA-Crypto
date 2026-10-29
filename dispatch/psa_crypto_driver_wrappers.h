@@ -71,6 +71,23 @@
 #include "cc3xx.h"
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX)
+#ifndef PSA_CRYPTO_DRIVER_PRESENT
+#define PSA_CRYPTO_DRIVER_PRESENT
+#endif
+#ifndef PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT
+#define PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT
+#endif
+#include "it51xxx_crypto.h"
+
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX_RSA)
+#include "it51xxx_crypto_rsa.h"
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX_SHA)
+#include "it51xxx_crypto_sha.h"
+#endif
+#endif /* PSA_CRYPTO_DRIVER_ITE_IT51XXX */
+
 /* END-driver headers */
 
 /* Auto-generated values depending on which drivers are registered.
@@ -106,6 +123,12 @@ static inline psa_status_t psa_driver_wrapper_init( void )
         return ( status );
 #endif
 
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX)
+    status = it51xxx_psa_crypto_init();
+    if (status != PSA_SUCCESS)
+        return ( status );
+#endif /* PSA_CRYPTO_DRIVER_ITE_IT51XXX */
+
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
     status = tfm_builtin_key_loader_init();
     if (status != PSA_SUCCESS)
@@ -136,6 +159,10 @@ static inline void psa_driver_wrapper_free( void )
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     (void)cc3xx_free();
 #endif
+
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX)
+    (void)it51xxx_psa_crypto_free();
+#endif /* PSA_CRYPTO_DRIVER_ITE_IT51XXX */
 }
 
 /* Start delegation functions */
@@ -358,6 +385,19 @@ static inline psa_status_t psa_driver_wrapper_sign_hash(
                                       signature_length );
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX_RSA)
+            status = ite_it51xxx_sign_hash( attributes,
+                                            key_buffer,
+                                            key_buffer_size,
+                                            alg,
+                                            hash,
+                                            hash_length,
+                                            signature,
+                                            signature_size,
+                                            signature_length );
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ITE_IT51XXX_RSA */
 #if defined (MBEDTLS_PSA_P256M_DRIVER_ENABLED)
             if( PSA_KEY_TYPE_IS_ECC( psa_get_key_type(attributes) ) &&
                 PSA_ALG_IS_RANDOMIZED_ECDSA(alg) &&
@@ -455,6 +495,18 @@ static inline psa_status_t psa_driver_wrapper_verify_hash(
                                         signature_length );
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX_RSA)
+            status = ite_it51xxx_verify_hash( attributes,
+                                              key_buffer,
+                                              key_buffer_size,
+                                              alg,
+                                              hash,
+                                              hash_length,
+                                              signature,
+                                              signature_length );
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ITE_IT51XXX_RSA */
 #if defined (MBEDTLS_PSA_P256M_DRIVER_ENABLED)
             if( PSA_KEY_TYPE_IS_ECC( psa_get_key_type(attributes) ) &&
                 PSA_ALG_IS_ECDSA(alg) &&
@@ -1649,6 +1701,12 @@ static inline psa_status_t psa_driver_wrapper_hash_compute(
     return( status );
 #endif /* defined(PSA_WANT_ALG_SHA_384) || defined(PSA_WANT_ALG_SHA_512) */
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
+#if defined(PSA_CRYPTO_DRIVER_ITE_IT51XXX_SHA)
+    status = ite_it51xxx_hash_compute( alg, input, input_length, hash,
+                                       hash_size, hash_length );
+    if( status != PSA_ERROR_NOT_SUPPORTED )
+        return( status );
+#endif /* PSA_CRYPTO_DRIVER_ITE_IT51XXX_SHA */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
     /* If software fallback is compiled in, try fallback */
