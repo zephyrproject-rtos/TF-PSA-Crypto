@@ -23,10 +23,6 @@
 #include "cc3xx_opaque_keys.h"
 #endif
 
-#if defined(TF_PSA_CRYPTO_PQCP_MLDSA_ENABLED)
-#include "psa_crypto_mldsa.h"
-#endif
-
 #include "mbedtls/platform.h"
 #include "mbedtls/constant_time.h"
 /* END-common headers */
