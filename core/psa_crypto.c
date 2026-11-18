@@ -7831,6 +7831,8 @@ static psa_status_t psa_key_derivation_input_internal(
         status = psa_sp800_108_counter_cmac_input(&operation->ctx.sp800_108_cmac,
                                                   attributes, step, data, data_length);
     } else
+#else /* MBEDTLS_PSA_BUILTIN_ALG_SP800_108_COUNTER_CMAC */
+    (void) attributes;
 #endif /* MBEDTLS_PSA_BUILTIN_ALG_SP800_108_COUNTER_CMAC */
 #if defined(BUILTIN_ALG_ANY_HKDF)
     if (PSA_ALG_IS_ANY_HKDF(kdf_alg)) {
